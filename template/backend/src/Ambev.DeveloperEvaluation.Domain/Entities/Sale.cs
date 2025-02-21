@@ -3,13 +3,13 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
     public class Sale
     {
-        public Guid Id { get; private set; }
-        public DateTime SaleDate { get; private set; }
-        public string Customer { get; private set; }
-        public decimal TotalAmount { get; private set; }
-        public string Branch { get; private set; }
-        public List<SaleItem> Items { get; private set; }
-        public bool Canceled { get; private set; }
+        public Guid Id { get;  set; }
+        public DateTime SaleDate { get;  set; }
+        public string Customer { get;  set; }
+        public decimal TotalAmount { get;  set; }
+        public string Branch { get;  set; }
+        public List<SaleItem> Items { get;  set; }
+        public bool Canceled { get;  set; }
 
         public Sale(){}
 
