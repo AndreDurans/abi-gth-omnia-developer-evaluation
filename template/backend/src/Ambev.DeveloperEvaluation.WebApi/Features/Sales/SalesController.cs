@@ -1,4 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,15 +11,19 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
     public class SalesController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public SalesController(IMediator mediator)
+        public SalesController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSale([FromBody] SaleDto saleDto)
+        public async Task<IActionResult> CreateSale([FromBody] SaleRequest sale)
         {
+            var saleDto = _mapper.Map<SaleDto>(sale);
+
             var command = new CreateSaleCommand { Sale = saleDto };
             var saleId = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetSale), new { id = saleId }, saleId);
