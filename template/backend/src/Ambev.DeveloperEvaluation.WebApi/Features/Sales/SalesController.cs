@@ -38,10 +38,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSale(Guid id, [FromBody] SaleDto updatedSaleDto)
+        public async Task<IActionResult> UpdateSale(Guid id, [FromBody] SaleRequest updatedSale)
         {
-            updatedSaleDto.Id = id;
-            var command = new UpdateSaleCommand { Sale = updatedSaleDto };
+            var saleDto = _mapper.Map<SaleDto>(updatedSale);
+
+            saleDto.Id = id;
+            var command = new UpdateSaleCommand { Sale = saleDto };
             await _mediator.Send(command);
             return NoContent();
         }
