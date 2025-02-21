@@ -15,7 +15,21 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public decimal Discount { get; private set; }
         public decimal TotalAmount { get; private set; }
 
+        // Chave estrangeira para Sale
+        public Guid SaleId { get; private set; }
+        public Sale Sale { get; private set; }
+
         public SaleItem(){}
+
+        public SaleItem(string product, int quantity, decimal unitPrice, Guid id)
+        {
+            SaleId = id;
+            Product = product;
+            Quantity = quantity;
+            UnitPrice = unitPrice;
+            ApplyDiscountRules();
+            CalculateTotalAmount();
+        }
 
         public SaleItem(string product, int quantity, decimal unitPrice)
         {

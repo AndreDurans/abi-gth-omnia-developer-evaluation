@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.ORM.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -9,8 +10,8 @@ namespace Ambev.DeveloperEvaluation.ORM;
 public class DefaultContext : DbContext
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<SaleItem> SaleItems { get; set; }
     public DbSet<Sale> Sales { get; set; }
+    public DbSet<SaleItem> SaleItems { get; set; }
 
     public DefaultContext(DbContextOptions<DefaultContext> options) : base(options)
     {
@@ -18,24 +19,8 @@ public class DefaultContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Sale>()
-           .HasMany(s => s.Items)
-           .WithOne()
-           .OnDelete(DeleteBehavior.Cascade); // Exclui os itens quando a venda for excluída
-
-        modelBuilder.Entity<SaleItem>()
-            .Property(si => si.UnitPrice)
-            .HasColumnType("decimal(18,2)");
-
-        modelBuilder.Entity<SaleItem>()
-            .Property(si => si.TotalAmount)
-            .HasColumnType("decimal(18,2)");
-
-        modelBuilder.Entity<SaleItem>()
-            .Property(si => si.Discount)
-            .HasColumnType("decimal(18,2)");
-
-
+        modelBuilder.ApplyConfiguration(new SaleConfiguration());
+        modelBuilder.ApplyConfiguration(new SaleItemConfiguration());
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
     }
